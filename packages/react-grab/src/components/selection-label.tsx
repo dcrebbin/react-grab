@@ -14,6 +14,9 @@ import { IconOpen } from "./icon-open.js";
 import { IconReturn } from "./icon-return.js";
 import { IconRetry } from "./icon-retry.js";
 import { isKeyboardEventTriggeredByInput } from "../utils/is-keyboard-event-triggered-by-input.js";
+import { IconDelete } from "./icon-delete.js";
+import { IconMicrophone } from "./icon-microphone.js";
+import { IconStop } from "./icon-stop.js";
 
 interface SpeechRecognitionResultItem {
   transcript: string;
@@ -787,6 +790,11 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
     return position;
   };
 
+  const handleClearInput = () => {
+    setBaseInputValue("");
+    props.onInputChange?.("");
+  };
+
   const handleKeyDown = (event: KeyboardEvent) => {
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -1120,34 +1128,53 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                     </span>
                   </div>
                 </Show>
-                <div class="shrink-0 flex justify-between items-end w-full min-h-4">
-                  <textarea
-                    ref={inputRef}
-                    data-react-grab-ignore-events
-                    class="text-black text-[13px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 wrap-break-word overflow-y-auto"
-                    style={{
-                      "field-sizing": "content",
-                      "min-height": "16px",
-                      "max-height": "95px",
-                      "scrollbar-width": "none",
-                    }}
-                    value={props.inputValue ?? ""}
-                    onInput={handleInput}
-                    onKeyDown={handleKeyDown}
-                    placeholder="type prompt"
-                    rows={1}
-                  />
+                <div class="contain-layout shrink-0 flex items-center gap-1 w-full h-fit">
                   <button
+                    type="button"
+                    onClick={handleListen}
                     class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
-                    onClick={handleSubmit}
                   >
-                    <IconReturn size={10} class="opacity-[0.99] text-black" />
+                    {isListening() ? (
+                      <IconStop size={10} class="opacity-[0.99] text-black" />
+                    ) : (
+                      <IconMicrophone
+                        size={10}
+                        class="opacity-[0.99] text-black"
+                      />
+                    )}
                   </button>
+                  <div class="shrink-0 flex justify-between items-end w-auto min-h-4">
+                    <textarea
+                      ref={inputRef}
+                      data-react-grab-ignore-events
+                      class="text-black text-[13px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 wrap-break-word overflow-y-auto"
+                      style={{
+                        "field-sizing": "content",
+                        "min-height": "16px",
+                        "max-height": "95px",
+                        "scrollbar-width": "none",
+                      }}
+                      value={props.inputValue ?? ""}
+                      onInput={handleInput}
+                      onKeyDown={handleKeyDown}
+                      placeholder="type prompt"
+                      rows={1}
+                    />
+                    <button
+                      class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
+                      onClick={handleClearInput}
+                    >
+                      <IconDelete size={10} class="opacity-[0.99] text-black" />
+                    </button>
+                    <button
+                      class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
+                      onClick={handleSubmit}
+                    >
+                      <IconReturn size={10} class="opacity-[0.99] text-black" />
+                    </button>
+                  </div>
                 </div>
               </BottomSection>
-              <button type="button" onClick={handleListen}>
-                {isListening() ? "Stop Listening" : "Listen"}
-              </button>
             </div>
           </Show>
 
