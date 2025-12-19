@@ -20,12 +20,12 @@ const SNAP_MARGIN = 16;
 const STORAGE_KEY = "react-grab-dock-state";
 const MOBILE_BREAKPOINT = 768;
 
-const Chevron: Component<{ class?: string }> = (props) => (
+const Chevron: Component<{ size?: number; class?: string }> = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="12"
-    height="12"
-    viewBox="0 0 24 24"
+    width={props.size ?? 12}
+    height={props.size ?? 12}
+    viewBox={`0 0 ${props.size ?? 12} ${props.size ?? 12}`}
     fill="none"
     stroke="currentColor"
     stroke-width="2.5"
@@ -448,7 +448,7 @@ export const Dock: Component<DockProps> = (props) => {
       ref={containerRef}
       data-react-grab-ignore-events
       class={cn(
-        "fixed left-0 top-0 font-sans text-[13px] antialiased filter-[drop-shadow(0px_0px_4px_#51515180)] select-none",
+        "fixed left-0 top-0 font-sans text-[24px] antialiased filter-[drop-shadow(0px_0px_4px_#51515180)] select-none",
         isCollapsed()
           ? "cursor-pointer"
           : isDragging()
@@ -508,7 +508,7 @@ export const Dock: Component<DockProps> = (props) => {
             onClick={handleToggle}
           >
             <IconSelect
-              size={14}
+              size={24}
               class={cn(
                 "transition-colors",
                 props.isActive ? "text-black" : "text-black/70",
@@ -522,6 +522,7 @@ export const Dock: Component<DockProps> = (props) => {
           onClick={handleToggleCollapse}
         >
           <Chevron
+            size={24}
             class={cn(
               "text-[#B3B3B3] transition-transform duration-100",
               chevronRotation(),

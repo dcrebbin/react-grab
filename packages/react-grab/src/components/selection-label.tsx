@@ -172,7 +172,7 @@ const TagBadge: Component<TagBadgeProps> = (props) => {
       </span>
       <Show when={props.isClickable || props.forceShowIcon}>
         <IconOpen
-          size={10}
+          size={20}
           class={cn(
             "text-white transition-all duration-100",
             isHovered() || props.forceShowIcon
@@ -239,7 +239,7 @@ const ClickToCopyPill: Component<ClickToCopyPillProps> = (props) => {
       role="button"
       onClick={props.onClick}
     >
-      <div class="text-[13px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
+      <div class="text-[23px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
         <Show when={labelPrefix()}>
           <span class="text-black/50">{labelPrefix()}</span>
         </Show>
@@ -304,7 +304,7 @@ const DismissConfirmation: Component<DismissConfirmationProps> = (props) => {
       onClick={handleFocus}
     >
       <div class="contain-layout shrink-0 flex items-center gap-1 pt-1 px-1.5 w-full h-fit">
-        <span class="text-black text-[13px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
+        <span class="text-black text-[23px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
           Discard?
         </span>
       </div>
@@ -314,7 +314,7 @@ const DismissConfirmation: Component<DismissConfirmationProps> = (props) => {
             class="contain-layout shrink-0 flex items-center justify-center px-[3px] py-px rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] cursor-pointer transition-all hover:bg-[#F5F5F5] h-[17px]"
             onClick={props.onCancel}
           >
-            <span class="text-black text-[13px] leading-3.5 font-sans font-medium">
+            <span class="text-black text-[23px] leading-3.5 font-sans font-medium">
               No
             </span>
           </button>
@@ -322,10 +322,10 @@ const DismissConfirmation: Component<DismissConfirmationProps> = (props) => {
             class="contain-layout shrink-0 flex items-center justify-center gap-1 px-[3px] py-px rounded-sm bg-white [border-width:0.5px] border-solid border-[#7e0002] cursor-pointer transition-all hover:bg-[#FEF2F2] h-[17px]"
             onClick={props.onConfirm}
           >
-            <span class="text-[#B91C1C] text-[13px] leading-3.5 font-sans font-medium">
+            <span class="text-[#B91C1C] text-[23px] leading-3.5 font-sans font-medium">
               Yes
             </span>
-            <IconReturn size={10} class="text-[#c00002]" />
+            <IconReturn size={20} class="text-[#c00002]" />
           </button>
         </div>
       </BottomSection>
@@ -382,13 +382,13 @@ const ErrorConfirmation: Component<ErrorConfirmationProps> = (props) => {
 
   return (
     <div
-      class="contain-layout shrink-0 flex flex-col justify-center items-end gap-1 w-fit h-fit max-w-[280px]"
+      class="contain-layout shrink-0 flex flex-col justify-center items-end gap-1 w-fit h-fit min-w-[280px] max-w-[380px]"
       onPointerDown={handleFocus}
       onClick={handleFocus}
     >
       <div class="contain-layout shrink-0 flex items-center gap-1 pt-1 px-1.5 w-full h-fit">
         <span
-          class="text-[#B91C1C] text-[13px] leading-4 font-sans font-medium"
+          class="text-[#B91C1C] text-[23px] leading-4 font-sans font-medium"
           title={props.error}
         >
           {truncatedError()}
@@ -400,16 +400,16 @@ const ErrorConfirmation: Component<ErrorConfirmationProps> = (props) => {
             class="contain-layout shrink-0 flex items-center justify-center gap-1 px-[3px] py-px rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] cursor-pointer transition-all hover:bg-[#F5F5F5] h-[17px]"
             onClick={props.onRetry}
           >
-            <span class="text-black text-[13px] leading-3.5 font-sans font-medium">
+            <span class="text-black text-[23px] leading-3.5 font-sans font-medium">
               Retry
             </span>
-            <IconRetry size={10} class="text-black/50" />
+            <IconRetry size={20} class="text-black/50" />
           </button>
           <button
             class="contain-layout shrink-0 flex items-center justify-center gap-1 px-[3px] py-px rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] cursor-pointer transition-all hover:bg-[#F5F5F5] h-[17px]"
             onClick={props.onAcknowledge}
           >
-            <span class="text-black text-[13px] leading-3.5 font-sans font-medium">
+            <span class="text-black text-[23px] leading-3.5 font-sans font-medium">
               Ok
             </span>
           </button>
@@ -520,7 +520,7 @@ const CompletedConfirmation: Component<CompletedConfirmationProps> = (
     >
       <Show when={!didCopy() && (props.onDismiss || props.onUndo)}>
         <div class="contain-layout shrink-0 flex items-center justify-between gap-2 pt-1.5 pb-1 px-1.5 w-full h-fit">
-          <span class="text-black text-[13px] leading-4 shrink-0 font-sans font-medium w-fit h-fit tabular-nums">
+          <span class="text-black text-[23px] leading-4 shrink-0 font-sans font-medium w-fit h-fit tabular-nums">
             {displayStatusText()}
           </span>
           <div class="contain-layout shrink-0 flex items-center gap-[5px] h-fit">
@@ -529,7 +529,7 @@ const CompletedConfirmation: Component<CompletedConfirmationProps> = (
                 class="contain-layout shrink-0 flex items-center justify-center px-[3px] py-px rounded-sm bg-white [border-width:0.5px] border-solid border-[#7e0002] cursor-pointer transition-all hover:bg-[#FEF2F2] h-[17px]"
                 onClick={() => props.onUndo?.()}
               >
-                <span class="text-[#B91C1C] text-[13px] leading-3.5 font-sans font-medium">
+                <span class="text-[#B91C1C] text-[23px] leading-3.5 font-sans font-medium">
                   Reject
                 </span>
               </button>
@@ -540,11 +540,11 @@ const CompletedConfirmation: Component<CompletedConfirmationProps> = (
                 onClick={handleDismiss}
                 disabled={didCopy()}
               >
-                <span class="text-black text-[13px] leading-3.5 font-sans font-medium">
+                <span class="text-black text-[23px] leading-3.5 font-sans font-medium">
                   {props.dismissButtonText ?? "Ok"}
                 </span>
                 <Show when={!didCopy()}>
-                  <IconReturn size={10} class="text-black/50" />
+                  <IconReturn size={20} class="text-black/50" />
                 </Show>
               </button>
             </Show>
@@ -553,7 +553,7 @@ const CompletedConfirmation: Component<CompletedConfirmationProps> = (
       </Show>
       <Show when={didCopy()}>
         <div class="contain-layout shrink-0 flex items-center gap-1 pt-1.5 pb-1 px-1.5 w-full h-fit">
-          <span class="text-black text-[13px] leading-4 shrink-0 font-sans font-medium w-fit h-fit tabular-nums">
+          <span class="text-black text-[23px] leading-4 shrink-0 font-sans font-medium w-fit h-fit tabular-nums">
             {displayStatusText()}
           </span>
         </div>
@@ -566,11 +566,11 @@ const CompletedConfirmation: Component<CompletedConfirmationProps> = (
             <textarea
               ref={inputRef}
               data-react-grab-ignore-events
-              class="text-black text-[13px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 wrap-break-word overflow-y-auto"
+              class="text-black text-[23px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 wrap-break-word overflow-y-auto"
               style={{
                 "field-sizing": "content",
-                "min-height": "16px",
-                "max-height": "95px",
+                "min-height": "20px",
+                "max-height": "150px",
                 "scrollbar-width": "none",
               }}
               value={followUpInput()}
@@ -580,10 +580,11 @@ const CompletedConfirmation: Component<CompletedConfirmationProps> = (
               rows={1}
             />
             <button
+              type="button"
               class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
               onClick={handleFollowUpSubmit}
             >
-              <IconReturn size={10} class="opacity-[0.99] text-black" />
+              <IconReturn size={20} class="opacity-[0.99] text-black" />
             </button>
           </div>
         </BottomSection>
@@ -991,7 +992,7 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
       <div
         ref={containerRef}
         data-react-grab-ignore-events
-        class="fixed font-sans text-[13px] antialiased transition-opacity duration-300 ease-out filter-[drop-shadow(0px_0px_4px_#51515180)] select-none"
+        class="fixed font-sans text-[23px] antialiased transition-opacity duration-300 ease-out filter-[drop-shadow(0px_0px_4px_#51515180)] select-none"
         style={{
           top: `${computedPosition().top}px`,
           left: `${computedPosition().left}px`,
@@ -1045,24 +1046,24 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
           }}
         >
           <Show when={props.status === "copying" && !props.isPendingAbort}>
-            <div class="contain-layout shrink-0 flex flex-col justify-center items-start gap-1 w-fit h-fit max-w-[280px]">
+            <div class="contain-layout shrink-0 flex flex-col justify-center items-start gap-1 w-fit h-fit max-w-[480px]">
               <div class="contain-layout shrink-0 flex items-center gap-1 pt-1 px-1.5 w-auto h-fit">
                 <div class="contain-layout flex items-center px-0 py-px w-auto h-fit rounded-sm gap-[3px]">
-                  <span class="text-[13px] leading-4 font-sans font-medium w-auto h-fit whitespace-normal text-[#71717a] animate-pulse tabular-nums">
+                  <span class="text-[23px] leading-4 font-sans font-medium w-auto h-fit whitespace-normal text-[#71717a] animate-pulse tabular-nums">
                     {props.statusText ?? "Grabbing…"}
                   </span>
                 </div>
               </div>
               <BottomSection>
-                <div class="shrink-0 flex justify-between items-end w-full min-h-4">
+                <div class="shrink-0 flex justify-between items-end w-full min-h-10">
                   <textarea
                     ref={inputRef}
                     data-react-grab-ignore-events
-                    class="text-black text-[13px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 opacity-50 wrap-break-word overflow-y-auto"
+                    class="text-black text-[23px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 opacity-50 wrap-break-word overflow-y-auto"
                     style={{
                       "field-sizing": "content",
-                      "min-height": "16px",
-                      "max-height": "95px",
+                      "min-height": "20px",
+                      "max-height": "150px",
                       "scrollbar-width": "none",
                     }}
                     value={props.inputValue ?? ""}
@@ -1128,7 +1129,7 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                 <div class={cn("overflow-hidden min-h-0", !isIdle() && "w-0")}>
                   <BottomSection>
                     <div class="contain-layout shrink-0 flex items-center gap-1 w-fit h-fit">
-                      <span class="text-label-muted text-[13px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
+                      <span class="text-label-muted text-[23px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
                         Press
                       </span>
                       <div class="contain-layout shrink-0 flex items-center justify-center px-[3px] py-[2px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit">
@@ -1136,7 +1137,7 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                           Esc
                         </span>
                       </div>
-                      <span class="text-label-muted text-[13px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
+                      <span class="text-label-muted text-[23px] leading-4 shrink-0 font-sans font-medium w-fit h-fit">
                         to dismiss
                       </span>
                     </div>
@@ -1153,29 +1154,31 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
               !props.isPendingDismiss
             }
           >
-            <div class="contain-layout shrink-0 flex flex-col justify-center items-start gap-1 w-fit h-fit max-w-[280px]">
-              <div class="contain-layout shrink-0 flex items-center gap-1 pt-1 w-fit h-fit pl-1.5 pr-1">
-                <ClickToCopyPill
-                  onClick={handleSubmit}
-                  dimmed
-                  shrink
-                  hasAgent={props.hasAgent}
-                  isEditing
-                />
-                <TagBadge
-                  tagName={tagDisplay()}
-                  isClickable={isTagClickable()}
-                  onClick={handleTagClick}
-                  onHoverChange={handleTagHoverChange}
-                  shrink
-                  forceShowIcon
-                />
+            <div class="contain-layout shrink-0 flex flex-col justify-center items-start gap-1 h-fit w-[280px]">
+              <div class="contain-layout shrink-0 flex justify-between items-center gap-1 pt-1 w-full h-fit pl-1.5 pr-1">
+                <div class="flex items-center gap-1 w-auto">
+                  <ClickToCopyPill
+                    onClick={handleSubmit}
+                    dimmed
+                    shrink
+                    hasAgent={props.hasAgent}
+                    isEditing
+                  />
+                  <TagBadge
+                    tagName={tagDisplay()}
+                    isClickable={isTagClickable()}
+                    onClick={handleTagClick}
+                    onHoverChange={handleTagHoverChange}
+                    shrink
+                    forceShowIcon
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={handleClose}
                   class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
                 >
-                  <IconClose size={10} class="opacity-[0.99] text-black" />
+                  <IconClose size={20} class="opacity-[0.99] text-black" />
                 </button>
               </div>
               <BottomSection>
@@ -1197,25 +1200,28 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                       class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
                     >
                       {isListening() ? (
-                        <IconStop size={10} class="opacity-[0.99] text-black" />
+                        <IconStop size={20} class="opacity-[0.99] text-black" />
                       ) : (
                         <IconMicrophone
-                          size={10}
+                          size={20}
                           class="opacity-[0.99] text-black"
                         />
                       )}
                     </button>
                   </Show>
-                  <div class="shrink-0 flex justify-between items-end w-auto min-h-4">
+                  <div class="flex w-full min-h-4 gap-1 items-center overflow-hidden">
                     <textarea
                       ref={inputRef}
                       data-react-grab-ignore-events
-                      class="text-black text-[13px] leading-4 font-medium bg-transparent border-none outline-none resize-none flex-1 p-0 m-0 wrap-break-word overflow-y-auto"
+                      class="text-black border-b border-solid border-[#B3B3B3] text-[23px] leading-[1.3] font-medium bg-transparent outline-none resize-none flex-1 min-w-0 max-w-full p-0 m-0 overflow-y-auto box-border"
                       style={{
                         "field-sizing": "content",
-                        "min-height": "16px",
-                        "max-height": "95px",
+                        "min-height": "28px",
+                        "max-height": "150px",
                         "scrollbar-width": "none",
+                        "word-wrap": "break-word",
+                        "overflow-wrap": "break-word",
+                        "white-space": "pre-wrap",
                       }}
                       value={props.inputValue ?? ""}
                       onInput={handleInput}
@@ -1223,18 +1229,28 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                       placeholder="type prompt"
                       rows={1}
                     />
-                    <button
-                      class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
-                      onClick={handleClearInput}
-                    >
-                      <IconDelete size={10} class="opacity-[0.99] text-black" />
-                    </button>
-                    <button
-                      class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
-                      onClick={handleSubmit}
-                    >
-                      <IconReturn size={10} class="opacity-[0.99] text-black" />
-                    </button>
+                    <div class="flex items-center h-auto flex-col justify-between self-stretch">
+                      <button
+                        type="button"
+                        class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105"
+                        onClick={handleClearInput}
+                      >
+                        <IconDelete
+                          size={20}
+                          class="opacity-[0.99] text-black"
+                        />
+                      </button>
+                      <button
+                        type="button"
+                        class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105"
+                        onClick={handleSubmit}
+                      >
+                        <IconReturn
+                          size={20}
+                          class="opacity-[0.99] text-black"
+                        />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </BottomSection>
