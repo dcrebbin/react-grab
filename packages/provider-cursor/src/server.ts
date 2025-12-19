@@ -1,5 +1,7 @@
 import { execa, type ResultPromise } from "execa";
 import { pathToFileURL } from "node:url";
+import { readFileSync } from "node:fs";
+import { createServer as createHttpsServer } from "node:https";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { streamSSE } from "hono/streaming";
@@ -7,7 +9,7 @@ import { serve } from "@hono/node-server";
 import fkill from "fkill";
 import pc from "picocolors";
 import type { AgentContext } from "react-grab/core";
-import { DEFAULT_PORT, COMPLETED_STATUS } from "./constants.js";
+import { DEFAULT_PORT, DEFAULT_HOST, COMPLETED_STATUS } from "./constants.js";
 
 const VERSION = process.env.VERSION ?? "0.0.0";
 
@@ -369,18 +371,56 @@ export const createServer = () => {
   return app;
 };
 
-export const startServer = async (port: number = DEFAULT_PORT) => {
+export interface ServerOptions {
+  port?: number;
+  host?: string;
+  sslCert?: string;
+  sslKey?: string;
+}
+
+export const startServer = async (options: ServerOptions = {}) => {
+  const { port = DEFAULT_PORT, host = DEFAULT_HOST, sslCert, sslKey } = options;
+
   await fkill(`:${port}`, { force: true, silent: true }).catch(() => {});
   await sleep(100);
 
   const app = createServer();
-  serve({ fetch: app.fetch, port });
+  const useSSL = sslCert && sslKey;
+  const protocol = useSSL ? "https" : "http";
+
+  if (useSSL) {
+    const sslOptions = {
+      cert: readFileSync(sslCert),
+      key: readFileSync(sslKey),
+    };
+    serve({
+      fetch: app.fetch,
+      port,
+      hostname: host,
+      createServer: createHttpsServer,
+      serverOptions: sslOptions,
+    });
+  } else {
+    serve({ fetch: app.fetch, port, hostname: host });
+  }
+
   console.log(
     `${pc.magenta("✿")} ${pc.bold("React Grab")} ${pc.gray(VERSION)} ${pc.dim("(Cursor)")}`,
   );
-  console.log(`- Local:    ${pc.cyan(`http://localhost:${port}`)}`);
+  const displayHost = host === "0.0.0.0" ? "localhost" : host;
+  console.log(`- Local:    ${pc.cyan(`${protocol}://${displayHost}:${port}`)}`);
+  if (host === "0.0.0.0") {
+    console.log(`- Network:  ${pc.cyan(`${protocol}://0.0.0.0:${port}`)}`);
+  }
 };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  startServer(DEFAULT_PORT).catch(console.error);
+  const port = process.env.REACT_GRAB_PORT
+    ? parseInt(process.env.REACT_GRAB_PORT, 10)
+    : DEFAULT_PORT;
+  const host = process.env.REACT_GRAB_HOST ?? DEFAULT_HOST;
+  const sslCert = process.env.REACT_GRAB_SSL_CERT || undefined;
+  const sslKey = process.env.REACT_GRAB_SSL_KEY || undefined;
+
+  startServer({ port, host, sslCert, sslKey }).catch(console.error);
 }
