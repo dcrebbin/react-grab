@@ -431,7 +431,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
         }
 
         if (isToggleMode() || shouldDeactivateAfter) {
-          // deactivateRenderer();
+          deactivateRenderer();
         }
       });
     };
@@ -915,7 +915,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
     const deactivateRenderer = () => {
       setIsToggleMode(false);
       setIsHoldingKeys(false);
-      setIsActivated(false);
+      // setIsActivated(false);
       setIsInputMode(false);
       setInputText("");
       setIsToggleFrozen(false);
@@ -1018,7 +1018,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
       const prompt = isInputMode() ? inputText().trim() : "";
 
       if (!element) {
-        // deactivateRenderer();
+        deactivateRenderer();
         return;
       }
 
@@ -1029,7 +1029,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
 
       if (hasAgentProvider() && prompt) {
         elementInputCache.delete(element);
-        // deactivateRenderer();
+        deactivateRenderer();
 
         const currentReplySessionId = replySessionId();
         setReplySessionId(null);
@@ -1067,7 +1067,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
           componentName ?? undefined,
           element,
         ).then(() => {
-          // deactivateRenderer();
+          deactivateRenderer();
         });
       });
     };
@@ -1089,13 +1089,13 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
 
       setIsPendingDismiss(false);
       setReplySessionId(null);
-      // deactivateRenderer();
+      deactivateRenderer();
     };
 
     const handleConfirmDismiss = () => {
       setIsPendingDismiss(false);
       setReplySessionId(null);
-      // deactivateRenderer();
+      deactivateRenderer();
     };
 
     const handleCancelDismiss = () => {
@@ -1485,7 +1485,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
               event.stopPropagation();
               setIsPendingAgentAbort(true);
             } else if (isToggleMode() && !isInputMode()) {
-              // deactivateRenderer();
+              deactivateRenderer();
             }
           }
           return;
@@ -1502,7 +1502,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
           }
 
           if (isHoldingKeys() || isToggleMode()) {
-            // deactivateRenderer();
+            deactivateRenderer();
             return;
           }
         }
@@ -1728,7 +1728,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
               !MODIFIER_KEYS.includes(event.key) &&
               !isEnterCode(event.code)
             ) {
-              // deactivateRenderer();
+              deactivateRenderer();
             }
           }
           if (!isEnterCode(event.code) || !isHoldingKeys()) {
@@ -1752,7 +1752,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
             window.clearTimeout(keydownSpamTimerId);
           }
           keydownSpamTimerId = window.setTimeout(() => {
-            // deactivateRenderer();
+            deactivateRenderer();
           }, 200);
           return;
         }
@@ -1834,7 +1834,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
         if (isActivated()) {
           if (isReleasingModifier) {
             if (isToggleMode() && options.activationMode !== "hold") return;
-            // deactivateRenderer();
+            deactivateRenderer();
           } else if (
             !hasCustomShortcut &&
             isReleasingActivationKey &&
@@ -1848,7 +1848,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
 
         if (isReleasingActivationKey || isReleasingModifier) {
           if (isToggleMode() && options.activationMode !== "hold") return;
-          // deactivateRenderer();
+          deactivateRenderer();
         }
       },
       { capture: true },
@@ -2006,7 +2006,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
 
     //       if (isToggleMode() && !isCopying() && !isInputMode()) {
     //         if (!isHoldingKeys()) {
-    //           // deactivateRenderer();
+    //           deactivateRenderer();
     //         } else {
     //           setIsToggleMode(false);
     //         }
@@ -2025,7 +2025,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
           activationTimestamp !== null &&
           Date.now() - activationTimestamp > BLUR_DEACTIVATION_THRESHOLD_MS
         ) {
-          // deactivateRenderer();
+          deactivateRenderer();
         }
       }
     });

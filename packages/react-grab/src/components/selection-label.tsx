@@ -17,6 +17,7 @@ import { isKeyboardEventTriggeredByInput } from "../utils/is-keyboard-event-trig
 import { IconDelete } from "./icon-delete.js";
 import { IconMicrophone } from "./icon-microphone.js";
 import { IconStop } from "./icon-stop.js";
+import { IconClose } from "./icon-close.jsx";
 
 interface SpeechRecognitionResultItem {
   transcript: string;
@@ -817,6 +818,11 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
     createSignal<SpeechRecognitionInstance | null>(null);
   const [baseInputValue, setBaseInputValue] = createSignal("");
 
+  //detect if chrome browser
+  const isChromeBrowser = () => {
+    return navigator.userAgent.includes("Chrome");
+  };
+
   const createRecognition = (): SpeechRecognitionInstance | null => {
     try {
       if (typeof window === "undefined") return null;
@@ -901,6 +907,10 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
     if (props.filePath && props.onOpen) {
       props.onOpen();
     }
+  };
+
+  const handleClose = () => {
+    props.onCancel?.();
   };
 
   const isTagClickable = () => Boolean(props.filePath && props.onOpen);
@@ -1116,6 +1126,13 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                   shrink
                   forceShowIcon
                 />
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
+                >
+                  <IconClose size={10} class="opacity-[0.99] text-black" />
+                </button>
               </div>
               <BottomSection>
                 <Show when={props.replyToPrompt}>
@@ -1129,20 +1146,22 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                   </div>
                 </Show>
                 <div class="contain-layout shrink-0 flex items-center gap-1 w-full h-fit">
-                  <button
-                    type="button"
-                    onClick={handleListen}
-                    class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
-                  >
-                    {isListening() ? (
-                      <IconStop size={10} class="opacity-[0.99] text-black" />
-                    ) : (
-                      <IconMicrophone
-                        size={10}
-                        class="opacity-[0.99] text-black"
-                      />
-                    )}
-                  </button>
+                  <Show when={isChromeBrowser()}>
+                    <button
+                      type="button"
+                      onClick={handleListen}
+                      class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
+                    >
+                      {isListening() ? (
+                        <IconStop size={10} class="opacity-[0.99] text-black" />
+                      ) : (
+                        <IconMicrophone
+                          size={10}
+                          class="opacity-[0.99] text-black"
+                        />
+                      )}
+                    </button>
+                  </Show>
                   <div class="shrink-0 flex justify-between items-end w-auto min-h-4">
                     <textarea
                       ref={inputRef}
