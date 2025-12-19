@@ -15,6 +15,57 @@ import { IconReturn } from "./icon-return.js";
 import { IconRetry } from "./icon-retry.js";
 import { isKeyboardEventTriggeredByInput } from "../utils/is-keyboard-event-triggered-by-input.js";
 
+interface SpeechRecognitionResultItem {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  isFinal: boolean;
+  item(index: number): SpeechRecognitionResultItem;
+  [index: number]: SpeechRecognitionResultItem;
+}
+
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+  message: string;
+}
+
+interface SpeechRecognitionInstance {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onend: (() => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognitionInstance;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  }
+}
+
 interface SelectionLabelProps {
   tagName?: string;
   componentName?: string;
@@ -553,6 +604,7 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
   const [viewportVersion, setViewportVersion] = createSignal(0);
   const [isIdle, setIsIdle] = createSignal(false);
   const [hadValidBounds, setHadValidBounds] = createSignal(false);
+  const [isListening, setIsListening] = createSignal(false);
 
   const isNotProcessing = () =>
     props.status !== "copying" &&
@@ -751,6 +803,81 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
   const handleInput = (event: InputEvent) => {
     const target = event.target as HTMLTextAreaElement;
     props.onInputChange?.(target.value);
+  };
+
+  const [recognition, setRecognition] =
+    createSignal<SpeechRecognitionInstance | null>(null);
+  const [baseInputValue, setBaseInputValue] = createSignal("");
+
+  const createRecognition = (): SpeechRecognitionInstance | null => {
+    try {
+      if (typeof window === "undefined") return null;
+      const SpeechRecognitionConstructor =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognitionConstructor) return null;
+
+      const recognitionInstance = new SpeechRecognitionConstructor();
+      recognitionInstance.continuous = true;
+      recognitionInstance.interimResults = true;
+      recognitionInstance.lang = "en-US";
+      return recognitionInstance;
+    } catch (error) {
+      console.error("Failed to create speech recognition:", error);
+      return null;
+    }
+  };
+
+  const handleListen = () => {
+    const currentlyListening = isListening();
+
+    if (currentlyListening) {
+      const currentRecognition = recognition();
+      if (currentRecognition) {
+        currentRecognition.stop();
+      }
+      setIsListening(false);
+      return;
+    }
+
+    let recognitionInstance = recognition();
+    if (!recognitionInstance) {
+      recognitionInstance = createRecognition();
+      if (!recognitionInstance) return;
+      setRecognition(recognitionInstance);
+    }
+
+    setBaseInputValue(props.inputValue ?? "");
+
+    recognitionInstance.onresult = (event: SpeechRecognitionEvent) => {
+      const results = event.results;
+      let transcript = "";
+      for (let resultIndex = 0; resultIndex < results.length; resultIndex++) {
+        transcript += results[resultIndex][0].transcript;
+      }
+      if (transcript) {
+        props.onInputChange?.(baseInputValue() + transcript);
+      }
+    };
+
+    recognitionInstance.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionInstance.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error("Speech recognition error:", event.error);
+      setIsListening(false);
+      if (event.error === "network" || event.error === "not-allowed") {
+        setRecognition(null);
+      }
+    };
+
+    try {
+      recognitionInstance.start();
+      setIsListening(true);
+    } catch (error) {
+      console.error("Failed to start speech recognition:", error);
+      setIsListening(false);
+    }
   };
 
   const tagDisplay = () => {
@@ -1018,6 +1145,9 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                   </button>
                 </div>
               </BottomSection>
+              <button type="button" onClick={handleListen}>
+                {isListening() ? "Stop Listening" : "Listen"}
+              </button>
             </div>
           </Show>
 
