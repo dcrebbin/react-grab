@@ -116,6 +116,7 @@ export const ReactGrabRenderer: Component<ReactGrabRendererProps> = (props) => {
 
       <Show when={props.selectionLabelVisible && props.selectionBounds}>
         <SelectionLabel
+          deepgramApiKey={props.deepgramApiKey}
           tagName={props.selectionTagName}
           componentName={props.selectionComponentName}
           selectionBounds={props.selectionBounds}

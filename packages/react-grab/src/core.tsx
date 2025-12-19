@@ -2274,6 +2274,11 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
       });
     });
 
+    const deepgramApiKey = createMemo(() => {
+      //terrible code
+      return "";
+    });
+
     const dragVisible = createMemo(
       () =>
         theme().dragBox.enabled &&
@@ -2318,6 +2323,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
       render(
         () => (
           <ReactGrabRenderer
+            deepgramApiKey={deepgramApiKey()}
             selectionVisible={selectionVisible()}
             selectionBounds={selectionBounds()}
             selectionFilePath={selectionFilePath()}

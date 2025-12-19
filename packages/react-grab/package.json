@@ -99,6 +99,7 @@
   },
   "dependencies": {
     "bippy": "^0.5.26",
-    "solid-js": "^1.9.10"
+    "solid-js": "^1.9.10",
+    "@deepgram/sdk": "^4.11.3"
   }
 }

@@ -287,6 +287,7 @@ export interface SelectionLabelInstance {
 }
 
 export interface ReactGrabRendererProps {
+  deepgramApiKey?: string;
   selectionVisible?: boolean;
   selectionBounds?: OverlayBounds;
   selectionFilePath?: string;

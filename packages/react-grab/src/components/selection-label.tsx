@@ -18,6 +18,7 @@ import { IconDelete } from "./icon-delete.js";
 import { IconMicrophone } from "./icon-microphone.js";
 import { IconStop } from "./icon-stop.js";
 import { IconClose } from "./icon-close.jsx";
+import { createDeepgramTranscription } from "../utils/deepgram.js";
 
 interface SpeechRecognitionResultItem {
   transcript: string;
@@ -101,6 +102,7 @@ interface SelectionLabelProps {
   isPendingDismiss?: boolean;
   onConfirmDismiss?: () => void;
   onCancelDismiss?: () => void;
+  deepgramApiKey?: string;
   isPendingAbort?: boolean;
   onConfirmAbort?: () => void;
   onCancelAbort?: () => void;
@@ -894,6 +896,48 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
     }
   };
 
+  let mediaRecorder: MediaRecorder | null = null;
+
+  const handleDeepgramListen = async () => {
+    if (!props.deepgramApiKey) {
+      console.error("Deepgram API key not provided");
+      return;
+    }
+
+    if (isListening()) {
+      setIsListening(false);
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+      }
+      mediaRecorder = null;
+      return;
+    }
+    setIsListening(true);
+
+    const deepgram = createDeepgramTranscription({
+      apiKey: props.deepgramApiKey,
+      onTranscript: (transcript: string) => {
+        console.log("transcript", transcript);
+        if (transcript) {
+          props.onInputChange?.(baseInputValue() + transcript);
+        }
+      },
+    });
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    const audioChunks: Blob[] = [];
+
+    mediaRecorder.addEventListener("dataavailable", (event: BlobEvent) => {
+      console.log("dataavailable", event.data);
+      audioChunks.push(event.data);
+      if (deepgram) {
+        deepgram.send(event.data);
+      }
+    });
+
+    mediaRecorder.start();
+  };
+
   const tagDisplay = () => {
     if (props.componentName && props.tagName) {
       return `${props.componentName}.${props.tagName}`;
@@ -1149,7 +1193,7 @@ export const SelectionLabel: Component<SelectionLabelProps> = (props) => {
                   <Show when={isChromeBrowser()}>
                     <button
                       type="button"
-                      onClick={handleListen}
+                      onClick={handleDeepgramListen}
                       class="contain-layout shrink-0 flex flex-col items-start px-[3px] py-[3px] rounded-sm bg-white [border-width:0.5px] border-solid border-[#B3B3B3] size-fit cursor-pointer transition-all hover:scale-105 ml-1"
                     >
                       {isListening() ? (
