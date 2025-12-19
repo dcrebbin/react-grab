@@ -1,6 +1,7 @@
 node_modules
 .DS_Store
 .env
+*.pem
 .turbo
 .ami-token
 dist
@@ -9,3 +10,5 @@ coverage
 react-grab-extension.zip
 tsup.config.bundled_*.mjs
 packages/website/public/react-grab.global.js
+# Snyk Security Extension - AI Rules (auto-generated)
+.cursor/rules/snyk_rules.mdc
