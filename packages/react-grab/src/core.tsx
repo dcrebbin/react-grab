@@ -1867,36 +1867,36 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
       handlePointerMove(event.clientX, event.clientY);
     });
 
-    eventListenerManager.addWindowListener(
-      "mousedown",
-      (event: MouseEvent) => {
-        if (event.button !== 0) return;
-        if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
+    // eventListenerManager.addWindowListener(
+    //   "mousedown",
+    //   (event: MouseEvent) => {
+    //     if (event.button !== 0) return;
+    //     if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
 
-        if (isInputMode()) {
-          handleInputCancel();
-          return;
-        }
+    //     if (isInputMode()) {
+    //       handleInputCancel();
+    //       return;
+    //     }
 
-        const didHandle = handlePointerDown(event.clientX, event.clientY);
-        if (didHandle) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-      },
-      { capture: true },
-    );
+    //     const didHandle = handlePointerDown(event.clientX, event.clientY);
+    //     if (didHandle) {
+    //       event.preventDefault();
+    //       event.stopPropagation();
+    //     }
+    //   },
+    //   { capture: true },
+    // );
 
-    eventListenerManager.addWindowListener(
-      "pointerdown",
-      (event: PointerEvent) => {
-        if (event.button !== 0) return;
-        if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
-        if (!isRendererActive() || isCopying() || isInputMode()) return;
-        event.stopPropagation();
-      },
-      { capture: true },
-    );
+    // eventListenerManager.addWindowListener(
+    //   "pointerdown",
+    //   (event: PointerEvent) => {
+    //     if (event.button !== 0) return;
+    //     if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
+    //     if (!isRendererActive() || isCopying() || isInputMode()) return;
+    //     event.stopPropagation();
+    //   },
+    //   { capture: true },
+    // );
 
     eventListenerManager.addWindowListener("mouseup", (event: MouseEvent) => {
       if (event.button !== 0) return;
@@ -1904,7 +1904,7 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
     });
 
     eventListenerManager.addWindowListener(
-      "contextmenu",
+      "mousedown",
       (event: MouseEvent) => {
         if (!isRendererActive() || isCopying() || isInputMode()) return;
         if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
@@ -1958,63 +1958,63 @@ export const init = (rawOptions?: Options): ReactGrabAPI => {
       { passive: true },
     );
 
-    eventListenerManager.addWindowListener(
-      "touchstart",
-      (event: TouchEvent) => {
-        if (event.touches.length === 0) return;
-        setIsTouchMode(true);
+    // eventListenerManager.addWindowListener(
+    //   "touchstart",
+    //   (event: TouchEvent) => {
+    //     if (event.touches.length === 0) return;
+    //     setIsTouchMode(true);
 
-        if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
+    //     if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
 
-        if (isInputMode()) {
-          handleInputCancel();
-          return;
-        }
+    //     if (isInputMode()) {
+    //       handleInputCancel();
+    //       return;
+    //     }
 
-        const didHandle = handlePointerDown(
-          event.touches[0].clientX,
-          event.touches[0].clientY,
-        );
-        if (didHandle) {
-          event.preventDefault();
-        }
-      },
-      { passive: false },
-    );
+    //     const didHandle = handlePointerDown(
+    //       event.touches[0].clientX,
+    //       event.touches[0].clientY,
+    //     );
+    //     if (didHandle) {
+    //       event.preventDefault();
+    //     }
+    //   },
+    //   { passive: false },
+    // );
 
-    eventListenerManager.addWindowListener("touchend", (event: TouchEvent) => {
-      if (event.changedTouches.length === 0) return;
-      handlePointerUp(
-        event.changedTouches[0].clientX,
-        event.changedTouches[0].clientY,
-      );
-    });
+    // eventListenerManager.addWindowListener("touchend", (event: TouchEvent) => {
+    //   if (event.changedTouches.length === 0) return;
+    //   handlePointerUp(
+    //     event.changedTouches[0].clientX,
+    //     event.changedTouches[0].clientY,
+    //   );
+    // });
 
-    eventListenerManager.addWindowListener(
-      "click",
-      (event: MouseEvent) => {
-        if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
+    // eventListenerManager.addWindowListener(
+    //   "click",
+    //   (event: MouseEvent) => {
+    //     if (isEventFromOverlay(event, "data-react-grab-ignore-events")) return;
 
-        if (isRendererActive() || isCopying() || didJustDrag()) {
-          event.preventDefault();
-          event.stopPropagation();
+    //     if (isRendererActive() || isCopying() || didJustDrag()) {
+    //       event.preventDefault();
+    //       event.stopPropagation();
 
-          const hadDrag = didJustDrag();
-          if (hadDrag) {
-            setDidJustDrag(false);
-          }
+    //       const hadDrag = didJustDrag();
+    //       if (hadDrag) {
+    //         setDidJustDrag(false);
+    //       }
 
-          if (isToggleMode() && !isCopying() && !isInputMode()) {
-            if (!isHoldingKeys()) {
-              // deactivateRenderer();
-            } else {
-              setIsToggleMode(false);
-            }
-          }
-        }
-      },
-      { capture: true },
-    );
+    //       if (isToggleMode() && !isCopying() && !isInputMode()) {
+    //         if (!isHoldingKeys()) {
+    //           // deactivateRenderer();
+    //         } else {
+    //           setIsToggleMode(false);
+    //         }
+    //       }
+    //     }
+    //   },
+    //   { capture: true },
+    // );
 
     eventListenerManager.addDocumentListener("visibilitychange", () => {
       if (document.hidden) {

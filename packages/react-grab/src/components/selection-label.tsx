@@ -210,7 +210,7 @@ const ClickToCopyPill: Component<ClickToCopyPillProps> = (props) => {
   const labelPrefix = () => {
     if (props.hasAgent) {
       if (props.isEditing) return null;
-      return "Right click to ";
+      return "Click to ";
     }
     return "Click to ";
   };
